@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="3" platform="JVM 11" allPlatforms="JVM [11]" useProjectSettings="false">
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files -Xuse-ir" />
+        </compilerSettings>
+        <compilerArguments>
+          <option name="destination" value="$MODULE_DIR$/../../build/classes/kotlin/main" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.4.30/aeecfab2e6acbcb80fc6628e8882c98cbbd819cf/kotlin-stdlib-jdk8-1.4.30.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.4.30/cd81ed90fd79e43f587bd384c2bc6d1aed0bfe31/kotlin-stdlib-jdk7-1.4.30.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.desktop/desktop-jvm/0.3.0-build152/6e74824d223e48814b925db9fed55bcd066a0acb/desktop-jvm-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material/material-desktop/0.3.0-build152/953f5cd9ba02d3b09f5ade54b5ce5943d54c912b/material-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material/material-ripple-desktop/0.3.0-build152/20b5ab69023e2e11e1a1292e5be6a57c57e507cd/material-ripple-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.foundation/foundation-desktop/0.3.0-build152/f53203abdd155f9afc57f29d9bca9eb5a284cd26/foundation-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.animation/animation-desktop/0.3.0-build152/7f10cdce5fd65557280df5d60e50824d06a1f855/animation-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.material/material-icons-core-desktop/0.3.0-build152/2155afd22a84631377e23e30fad1c84a5a7f9173/material-icons-core-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.foundation/foundation-layout-desktop/0.3.0-build152/d62d4368ad777a43dec72492a5973ff6b03c67c2/foundation-layout-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-desktop/0.3.0-build152/75e4590712d0f506b80b94f6dc4f8291d4ffe5d6/ui-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-swing/1.4.1/60c1303504d7e745820865d4f29be7ea23303318/kotlinx-coroutines-swing-1.4.1.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.runtime/runtime-saveable-desktop/0.3.0-build152/a80662a57121fac7cbfad2c7ab2530f006bb2879/runtime-saveable-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.runtime/runtime-desktop/0.3.0-build152/84b8d2f9792c13d0f31901dffd4ee2478815d284/runtime-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.animation/animation-core-desktop/0.3.0-build152/c8c18785c828fdfc7f53d8c4f5e3f6c62567ecae/animation-core-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.4.1/936067d1e0195f638396f60e71da745bb14a35ca/kotlinx-coroutines-core-jvm-1.4.1.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.4.30/d10d1e10f47006ee08162dde039e38ac487de4ac/kotlin-stdlib-1.4.30.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.4.30/bb9a3173350f55732416ee27956ea8f9b81f4dbb/kotlin-stdlib-common-1.4.30.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-text-desktop/0.3.0-build152/893ed7d9f57fe4656733c4ccae363428ae6f05c7/ui-text-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-graphics-desktop/0.3.0-build152/a3cf3b91f419d61667c8e2095beb611aaa5f62d6/ui-graphics-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-unit-desktop/0.3.0-build152/b99cc138a66ecb249d4902d0b8e3a3125180fc75/ui-unit-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.ui/ui-geometry-desktop/0.3.0-build152/bf8cd9c4eb4c17661dd2d32a6a5b400fbfe89e7b/ui-geometry-desktop-0.3.0-build152.jar;C:/Users/Admin/.gradle/caches/modules-2/files-2.1/org.jetbrains.skiko/skiko-jvm/0.2.6/9d99d369fceec4654ae7b26440334d87042a09c2/skiko-jvm-0.2.6.jar" />
+          <option name="noStdlib" value="true" />
+          <option name="noReflect" value="true" />
+          <option name="moduleName" value="multi-srs" />
+          <option name="jvmTarget" value="11" />
+          <option name="languageVersion" value="1.4" />
+          <option name="apiVersion" value="1.4" />
+          <option name="pluginOptions">
+            <array />
+          </option>
+          <option name="pluginClasspaths">
+            <array>
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.compose.compiler/compiler/0.3.0-build152/ca1b96534a72864a311f3fb65cc9b779ab29e443/compiler-0.3.0-build152.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.4.30/b9c2a1fab9217623fc0fbadf6190e77eed6f054d/kotlin-script-runtime-1.4.30.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.4.30/c7896c5c6b504f44e7cf9f5719d4393e20680666/kotlin-scripting-common-1.4.30.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.4.30/7d0085e5781847da84580d16239c1c4e0980bdb0/kotlin-scripting-jvm-1.4.30.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.4.30/bb9a3173350f55732416ee27956ea8f9b81f4dbb/kotlin-stdlib-common-1.4.30.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.4.30/d10d1e10f47006ee08162dde039e38ac487de4ac/kotlin-stdlib-1.4.30.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/1.3.8/f62be6d4cbf27781c2969867b4ed952f38378492/kotlinx-coroutines-core-1.3.8.jar" />
+              <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
+            </array>
+          </option>
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+</module>
