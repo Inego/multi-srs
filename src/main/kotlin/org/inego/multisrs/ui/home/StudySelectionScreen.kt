@@ -1,4 +1,4 @@
-package org.inego.multisrs.ui
+package org.inego.multisrs.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
@@ -12,12 +12,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import mu.KotlinLogging
+import org.inego.multisrs.StudyData
 import org.inego.multisrs.data.Study
 import org.inego.multisrs.utils.selectOpenFilePath
 import org.inego.multisrs.utils.selectSaveFilePath
 import org.inego.multisrs.utils.workingDir
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
+import kotlin.io.path.writeBytes
 
 private val logger = KotlinLogging.logger {}
 
@@ -48,6 +50,10 @@ fun StudySelectionScreen(
                 val saveFilePath = selectSaveFilePath()
                 if (saveFilePath != null) {
                     val filePathStr = saveFilePath.toString()
+
+                    // Save a blank file at once
+                    saveFilePath.writeBytes(StudyData.newBuilder().build().toByteArray())
+
                     add(Study(filePathStr, filePathStr))
                 }
             }) {

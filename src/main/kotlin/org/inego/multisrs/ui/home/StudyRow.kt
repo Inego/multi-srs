@@ -1,4 +1,4 @@
-package org.inego.multisrs.ui
+package org.inego.multisrs.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

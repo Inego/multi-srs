@@ -1,7 +1,7 @@
 package org.inego.multisrs.utils
 
 import androidx.compose.desktop.AppManager
-import org.inego.multisrs.ui.chooser
+import org.inego.multisrs.ui.home.chooser
 import java.nio.file.Path
 import javax.swing.JFileChooser
 import javax.swing.JOptionPane

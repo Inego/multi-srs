@@ -10,8 +10,8 @@ import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.inego.multisrs.data.AppSettings
 import org.inego.multisrs.data.Study
-import org.inego.multisrs.ui.LearningScreen
-import org.inego.multisrs.ui.StudySelectionScreen
+import org.inego.multisrs.ui.learning.LearningScreen
+import org.inego.multisrs.ui.home.StudySelectionScreen
 import org.inego.multisrs.ui.state.AppScreen.*
 import org.inego.multisrs.utils.workingDir
 import java.nio.file.Path
