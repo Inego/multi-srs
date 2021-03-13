@@ -34,8 +34,6 @@ fun NewNotes(modifier: Modifier) {
         addWindowHolder.value!!.close()
     }
 
-    val tabPressed = remember { mutableStateOf(false) }
-
     Surface(modifier, color = Color.Yellow) {
 
         Box(Modifier.fillMaxSize()) {
@@ -53,12 +51,9 @@ fun NewNotes(modifier: Modifier) {
                                 // Close
                                 closeAddWindow()
                             }
-                            keyboard.setShortcut(Key.Tab) {
-                                tabPressed.value = true
-                            }
 
                             show(parentComposition) {
-                                AddNote(tabPressed)
+                                AddNote()
                             }
                         }
                     }

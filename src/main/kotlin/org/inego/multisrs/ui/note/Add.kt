@@ -3,54 +3,47 @@ package org.inego.multisrs.ui.note
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.*
-import androidx.compose.ui.input.key.onPreviewKeyEvent
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
+import org.inego.multisrs.ui.focus.FocusUtil
+import org.inego.multisrs.ui.focus.withFocus
+
 
 @Composable
-fun AddNote(tabPressed: MutableState<Boolean>) {
+fun AddNote() {
 
     val (question, setQuestion) = remember { mutableStateOf(TextFieldValue("")) }
     val (comment, setComment) = remember { mutableStateOf(TextFieldValue("")) }
+    val (comment2, setComment2) = remember { mutableStateOf(TextFieldValue("")) }
 
-    val frQuestion = remember { FocusRequester() }
-    val frComment = remember { FocusRequester() }
+    val focusUtil = FocusUtil()
 
     Column {
         TextField(question,
             onValueChange = { setQuestion(it) },
             label = { Text("Question:") },
-            modifier = Modifier
-                .focusRequester(frQuestion)
-                .focusOrder { next = frComment }
-                .onPreviewKeyEvent {
-                    println("Preview Key Event = $it")
-                    false
-                }
+            modifier = Modifier.withFocus(focusUtil, 1)
         )
 
         TextField(comment,
             onValueChange = { setComment(it) },
             label = { Text("Comment:") },
-            modifier = Modifier
-                .focusRequester(frComment)
-                .focusOrder { next = frQuestion }
+            modifier = Modifier.withFocus(focusUtil, 2)
+        )
+
+        TextField(comment2,
+            onValueChange = { setComment2(it) },
+            label = { Text("Comment 2:") },
+            modifier = Modifier.withFocus(focusUtil, 3)
         )
     }
 
-    if (tabPressed.value) {
-        tabPressed.value = false
-        LocalFocusManager.current.moveFocus(FocusDirection.Next)
-    }
-
     DisposableEffect(Unit) {
-        frQuestion.requestFocus()
-
+        focusUtil.moveNext(null)
         onDispose {  }
     }
-
-
 }
