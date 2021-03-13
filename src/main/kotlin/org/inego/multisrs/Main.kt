@@ -8,17 +8,15 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
-import org.inego.multisrs.data.AppSettings
-import org.inego.multisrs.data.Study
+import org.inego.multisrs.data.*
 import org.inego.multisrs.ui.learning.LearningScreen
 import org.inego.multisrs.ui.home.StudySelectionScreen
+import org.inego.multisrs.ui.settings.study.StudySettingsScreen
 import org.inego.multisrs.ui.state.AppScreen.*
 import org.inego.multisrs.utils.workingDir
+import java.lang.IllegalStateException
 import java.nio.file.Path
-import kotlin.io.path.ExperimentalPathApi
-import kotlin.io.path.exists
-import kotlin.io.path.readText
-import kotlin.io.path.writeText
+import kotlin.io.path.*
 
 
 private val logger = KotlinLogging.logger {}
@@ -42,6 +40,8 @@ fun saveAppSettings(appSettings: AppSettings) {
     settingsPath.writeText(appSettingsJsonString)
 }
 
+val studyDataFileHolder = StudyDataFileHolder()
+
 
 @ExperimentalFoundationApi
 @ExperimentalPathApi
@@ -64,14 +64,31 @@ fun main() {
 
             LEARNING -> {
                 val study = appSettings.studies[0]
-                LearningScreen(study, goHome = {
+                val fileResult = studyDataFileHolder.getFileResult(study)
+                LearningScreen(study, fileResult, goHome = {
                     setAppSettings(appSettings.copy(screen = STUDY_SELECTION))
-                })
+                }) {
+                    setAppSettings(appSettings.copy(screen = STUDY_SETTINGS))
+                }
             }
             BROWSING -> TODO()
+            STUDY_SETTINGS -> {
+                val study = appSettings.studies[0]
+                val fileResult = studyDataFileHolder.getFileResult(study)
+
+                StudySettingsScreen(study, fileResult, goBack = {
+                    setAppSettings(appSettings.copy(screen = LEARNING))
+                })
+            }
+            else -> throw IllegalStateException("Whoooops")
         }
     }
 }
+
+
+
+
+
 
 
 fun selectStudy(study: Study) {
@@ -88,6 +105,7 @@ fun selectStudy(study: Study) {
     setAppSettings(AppSettings(LEARNING, studies))
 }
 
+
 private fun readAppSettings(): AppSettings {
 
     return if (settingsPath.exists()) {
@@ -102,3 +120,4 @@ private fun readAppSettings(): AppSettings {
         AppSettings.empty()
     }
 }
+

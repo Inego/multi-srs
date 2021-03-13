@@ -2,6 +2,7 @@ package org.inego.multisrs.ui.note
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -18,7 +19,6 @@ fun AddNote() {
 
     val (question, setQuestion) = remember { mutableStateOf(TextFieldValue("")) }
     val (comment, setComment) = remember { mutableStateOf(TextFieldValue("")) }
-    val (comment2, setComment2) = remember { mutableStateOf(TextFieldValue("")) }
 
     val focusUtil = FocusUtil()
 
@@ -26,20 +26,18 @@ fun AddNote() {
         TextField(question,
             onValueChange = { setQuestion(it) },
             label = { Text("Question:") },
-            modifier = Modifier.withFocus(focusUtil, 1)
+            modifier = Modifier.withFocus(focusUtil, 1),
+            singleLine = true
         )
 
         TextField(comment,
             onValueChange = { setComment(it) },
             label = { Text("Comment:") },
-            modifier = Modifier.withFocus(focusUtil, 2)
+            modifier = Modifier.withFocus(focusUtil, 2),
+            singleLine = true
         )
 
-        TextField(comment2,
-            onValueChange = { setComment2(it) },
-            label = { Text("Comment 2:") },
-            modifier = Modifier.withFocus(focusUtil, 3)
-        )
+        TextButton({}) { Text("Add") }
     }
 
     DisposableEffect(Unit) {
