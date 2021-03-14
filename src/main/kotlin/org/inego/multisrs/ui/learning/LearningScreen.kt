@@ -63,7 +63,7 @@ fun LearningScreen(study: Study, studyFileResult: StudyFileResult, goHome: () ->
 
                     Row(Modifier.fillMaxWidth().weight(1f)) {
                         StudiedNotes(Modifier.weight(1f))
-                        NewNotes(Modifier.weight(1f))
+                        NewNotes(Modifier.weight(1f), studyData)
                     }
 
                     SelectedEntriesArea(Modifier)

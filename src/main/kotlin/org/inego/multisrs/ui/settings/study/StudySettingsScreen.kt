@@ -58,9 +58,7 @@ fun StudySettingsScreen(study: Study, studyFileResult: StudyFileResult, goBack: 
                             }
                         }
                     }
-
                 }
-
             }
         }
     }
