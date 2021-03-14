@@ -8,23 +8,33 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
-import org.inego.multisrs.StudyData
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.onKeyEvent
 import org.inego.multisrs.data.Study
 import org.inego.multisrs.data.StudyFileResult
 import org.inego.multisrs.data.StudyReadFailure
 import org.inego.multisrs.data.StudyReadSuccess
-import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.readBytes
+import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
 @Composable
-fun LearningScreen(study: Study, studyFileResult: StudyFileResult, goHome: () -> Unit, openSettings: () -> Unit) {
-
+fun LearningScreen(
+    study: Study,
+    studyFileResult: StudyFileResult,
+    globalKeysPressed: SnapshotStateMap<Key, Boolean>,
+    goHome: () -> Unit,
+    openSettings: () -> Unit
+) {
     val actionsMenuShown = remember { mutableStateOf(false) }
 
-    Column {
+    Column(
+        Modifier.onKeyEvent {
+            println("LearningScreen $it")
+            true
+        }
+    ) {
 
         TopAppBar(title = {
             Text(study.name)
@@ -54,7 +64,7 @@ fun LearningScreen(study: Study, studyFileResult: StudyFileResult, goHome: () ->
 
             is StudyReadSuccess -> {
 
-                val studyData = studyFileResult.studyData
+                val viewModel = StudyDataViewModel(studyFileResult.studyData, globalKeysPressed)
 
                 Text("Study")
                 Text(study.fileName)
@@ -63,7 +73,7 @@ fun LearningScreen(study: Study, studyFileResult: StudyFileResult, goHome: () ->
 
                     Row(Modifier.fillMaxWidth().weight(1f)) {
                         StudiedNotes(Modifier.weight(1f))
-                        NewNotes(Modifier.weight(1f), studyData)
+                        NewNotes(Modifier.weight(1f), viewModel)
                     }
 
                     SelectedEntriesArea(Modifier)

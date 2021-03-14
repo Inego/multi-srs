@@ -11,48 +11,67 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.input.TextFieldValue
-import org.inego.multisrs.Direction
 import org.inego.multisrs.ui.common.CheckboxWithLabel
 import org.inego.multisrs.ui.focus.FocusUtil
 import org.inego.multisrs.ui.focus.withFocus
+import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
 @Composable
-fun AddNote(directions: List<Direction>, directionsEnabled: SnapshotStateMap<Int, Boolean>) {
+fun AddNote(viewModel: StudyDataViewModel, directionsEnabled: SnapshotStateMap<Int, Boolean>) {
 
     val (question, setQuestion) = remember { mutableStateOf(TextFieldValue("")) }
     val (comment, setComment) = remember { mutableStateOf(TextFieldValue("")) }
 
     val focusUtil = FocusUtil()
 
+    Row {
 
-
-    Column {
-
-        Row {
-            directions.forEach {
-                val checked = directionsEnabled[it.id]!!
-                CheckboxWithLabel(it.name, checked) { b -> directionsEnabled[it.id] = b }
+        Column(
+            Modifier.onKeyEvent {
+                if (it.key == Key.Enter && it.type == KeyEventType.KeyDown) {
+                    println("ENTER!!!")
+                    true
+                } else false
             }
+        ) {
+
+            Row {
+                viewModel.directionsList.forEach {
+                    val checked = directionsEnabled[it.id]!!
+                    CheckboxWithLabel(it.name, checked) { b -> directionsEnabled[it.id] = b }
+                }
+            }
+
+            TextField(question,
+                onValueChange = { setQuestion(it) },
+                label = { Text("Question:") },
+                modifier = Modifier.withFocus(focusUtil, 1),
+                singleLine = true
+            )
+
+            TextField(comment,
+                onValueChange = { setComment(it) },
+                label = { Text("Comment:") },
+                modifier = Modifier.withFocus(focusUtil, 2),
+                singleLine = true
+            )
+
+            TextButton({}) { Text("Add") }
         }
 
-        TextField(question,
-            onValueChange = { setQuestion(it) },
-            label = { Text("Question:") },
-            modifier = Modifier.withFocus(focusUtil, 1),
-            singleLine = true
-        )
+        Column {
 
-        TextField(comment,
-            onValueChange = { setComment(it) },
-            label = { Text("Comment:") },
-            modifier = Modifier.withFocus(focusUtil, 2),
-            singleLine = true
-        )
+            Text("Added notes:")
 
-        TextButton({}) { Text("Add") }
+        }
+
+
     }
+
+
 
     DisposableEffect(Unit) {
         focusUtil.moveNext(null)
