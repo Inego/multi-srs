@@ -27,16 +27,13 @@ fun AddNote(viewModel: StudyDataViewModel, directionsEnabled: SnapshotStateMap<I
 
     val focusUtil = FocusUtil()
 
+    viewModel.ifPressed(Key.Enter) {
+        println("ENTER!!!")
+    }
+
     Row {
 
-        Column(
-            Modifier.onKeyEvent {
-                if (it.key == Key.Enter && it.type == KeyEventType.KeyDown) {
-                    println("ENTER!!!")
-                    true
-                } else false
-            }
-        ) {
+        Column {
 
             Row {
                 viewModel.directionsList.forEach {
@@ -63,9 +60,7 @@ fun AddNote(viewModel: StudyDataViewModel, directionsEnabled: SnapshotStateMap<I
         }
 
         Column {
-
             Text("Added notes:")
-
         }
 
 

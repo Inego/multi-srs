@@ -58,12 +58,6 @@ fun main() {
     SwingUtilities.invokeLater {
         val appWindow = AppWindow(title = "multi-srs")
 
-        val globalKeysPressed: SnapshotStateMap<Key, Boolean> = mutableStateMapOf<Key, Boolean>()
-
-        appWindow.keyboard.setShortcut(Key.A) {
-            globalKeysPressed[Key.A] = true
-        }
-
         appWindow.show {
             val appSettings = msAppSettings.value
 
@@ -81,7 +75,7 @@ fun main() {
                 LEARNING -> {
                     val study = appSettings.studies[0]
                     val fileResult = studyDataFileHolder.getFileResult(study)
-                    LearningScreen(study, fileResult, globalKeysPressed, goHome = {
+                    LearningScreen(study, fileResult, goHome = {
                         setAppSettings(appSettings.copy(screen = STUDY_SELECTION))
                     }) {
                         setAppSettings(appSettings.copy(screen = STUDY_SETTINGS))
@@ -96,7 +90,6 @@ fun main() {
                         setAppSettings(appSettings.copy(screen = LEARNING))
                     })
                 }
-                else -> throw IllegalStateException("Whoooops")
             }
         }
     }

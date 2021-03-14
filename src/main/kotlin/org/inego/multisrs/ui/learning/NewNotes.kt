@@ -20,8 +20,6 @@ import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 @Composable
 fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
-    val coroutineScope = rememberCoroutineScope()
-
     val parentComposition = rememberCompositionContext()
 
     var addWindowHolder by remember { mutableStateOf<AppWindow?>(null) }
@@ -35,20 +33,16 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
     }
 
     val onDismissAddWindow = {
-        println("On dismiss")
         addWindowHolder = null
     }
 
     val closeAddWindow = {
-        println("Close!")
         addWindowHolder!!.close()
-
     }
 
+
     val clickAdd = {
-        println("clickAdd")
         if (addWindowHolder == null) {
-            println("creating AppWindow")
             addWindowHolder = AppWindow(
                 onDismissRequest = onDismissAddWindow,
                 title = "Add a note",
@@ -58,6 +52,10 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                     closeAddWindow()
                 }
 
+                keyboard.setShortcut(Key.Enter) {
+                    viewModel press Key.Enter
+                }
+
                 show(parentComposition) {
                     AddNote(viewModel, directionsEnabled)
                 }
@@ -65,13 +63,8 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
         }
     }
 
-    if (viewModel.globalKeysPressed[Key.A] == true) {
-        viewModel.globalKeysPressed.remove(Key.A)
-        coroutineScope.launch {
-            // Workaround -- see https://github.com/JetBrains/compose-jb/issues/496
-            delay(100)
-            clickAdd()
-        }
+    viewModel.ifPressed(Key.A) {
+        clickAdd()
     }
 
     Surface(modifier, color = Color.Yellow) {

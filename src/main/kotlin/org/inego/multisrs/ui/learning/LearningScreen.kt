@@ -1,17 +1,16 @@
 package org.inego.multisrs.ui.learning
 
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.*
 import org.inego.multisrs.data.Study
 import org.inego.multisrs.data.StudyFileResult
 import org.inego.multisrs.data.StudyReadFailure
@@ -23,17 +22,23 @@ import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 fun LearningScreen(
     study: Study,
     studyFileResult: StudyFileResult,
-    globalKeysPressed: SnapshotStateMap<Key, Boolean>,
     goHome: () -> Unit,
     openSettings: () -> Unit
 ) {
     val actionsMenuShown = remember { mutableStateOf(false) }
+    val keysPressed = remember { mutableStateMapOf<Key, Boolean>() }
+    val topFocusRequester = FocusRequester()
 
     Column(
-        Modifier.onKeyEvent {
-            println("LearningScreen $it")
-            true
-        }
+        Modifier
+            .focusRequester(topFocusRequester)
+            .focusable()
+            .onKeyEvent {
+                if (it.type == KeyEventType.KeyDown) {
+                    keysPressed[it.key] = true
+                }
+                true
+            }
     ) {
 
         TopAppBar(title = {
@@ -64,7 +69,7 @@ fun LearningScreen(
 
             is StudyReadSuccess -> {
 
-                val viewModel = StudyDataViewModel(studyFileResult.studyData, globalKeysPressed)
+                val viewModel = StudyDataViewModel(studyFileResult.studyData, keysPressed)
 
                 Text("Study")
                 Text(study.fileName)
@@ -85,6 +90,11 @@ fun LearningScreen(
                 Text(studyFileResult.exception.message ?: "ERROR", color = MaterialTheme.colors.error)
             }
         }
+    }
+
+    DisposableEffect(Unit) {
+        topFocusRequester.requestFocus()
+        onDispose {  }
     }
 
 }

@@ -13,6 +13,17 @@ class StudyDataViewModel(
 
     val directionsList: List<Direction> = studyData.directionsList
 
+    infix fun press(key: Key) {
+        globalKeysPressed[key] = true
+    }
+
+    fun ifPressed(key: Key, block: () -> Unit) {
+        if (globalKeysPressed[key] == true) {
+            globalKeysPressed.remove(key)
+            block()
+        }
+    }
+
     fun addNote(note: Note) {
 
     }
