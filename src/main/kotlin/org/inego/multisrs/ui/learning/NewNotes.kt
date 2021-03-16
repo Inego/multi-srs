@@ -1,6 +1,7 @@
 package org.inego.multisrs.ui.learning
 
 import androidx.compose.desktop.AppWindow
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
@@ -11,12 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.inego.multisrs.ui.note.AddNote
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
+@ExperimentalFoundationApi
 @Composable
 fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
@@ -57,7 +57,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                 }
 
                 show(parentComposition) {
-                    AddNote(viewModel, directionsEnabled)
+                    AddNote(viewModel, directionsEnabled, closeAddWindow)
                 }
             }
         }

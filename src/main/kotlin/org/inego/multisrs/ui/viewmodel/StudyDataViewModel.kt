@@ -25,6 +25,6 @@ class StudyDataViewModel(
     }
 
     fun addNote(note: Note) {
-
+        studyData = studyData.toBuilder().addNotes(note).build()
     }
 }

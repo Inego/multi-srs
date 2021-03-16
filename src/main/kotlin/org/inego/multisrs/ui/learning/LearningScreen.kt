@@ -1,5 +1,6 @@
 package org.inego.multisrs.ui.learning
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -18,6 +19,7 @@ import org.inego.multisrs.data.StudyReadSuccess
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
+@ExperimentalFoundationApi
 @Composable
 fun LearningScreen(
     study: Study,

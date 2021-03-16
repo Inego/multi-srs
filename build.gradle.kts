@@ -34,6 +34,7 @@ val kotestVer = "4.+"
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation("com.google.protobuf", "protobuf-java", protoVer)
+    implementation("com.google.protobuf", "protobuf-java-util", protoVer)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
     implementation("org.slf4j:slf4j-simple:1.7.29")
