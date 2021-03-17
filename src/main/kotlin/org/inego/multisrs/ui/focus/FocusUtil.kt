@@ -7,6 +7,7 @@ import androidx.compose.ui.input.key.*
 
 class FocusUtil {
     private val requesters = mutableListOf<FocusRequesterWithOrder>()
+    private val indexMap = mutableMapOf<Int, FocusRequesterWithOrder>()
 
     fun moveNext(requester: FocusRequester?) {
         var i = if (requester == null) 0
@@ -29,10 +30,23 @@ class FocusUtil {
     }
 
     fun requester(order: Int): FocusRequester {
-        val focusRequester = FocusRequester()
-        requesters.add(FocusRequesterWithOrder(focusRequester, order))
+        val focusRequesterWithOrder = indexMap.computeIfAbsent(order) {
+            val focusRequester = FocusRequester()
+            FocusRequesterWithOrder(focusRequester, order)
+        }
+
+        requesters.add(focusRequesterWithOrder)
         requesters.sortBy { it.order }
-        return focusRequester
+        return focusRequesterWithOrder.focusRequester
+    }
+
+    fun focusFirst() {
+        if (requesters.isEmpty()) return
+        requesters[0].focusRequester.requestFocus()
+    }
+
+    fun startRecomposition() {
+        requesters.clear()
     }
 }
 

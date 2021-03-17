@@ -2,10 +2,7 @@ package org.inego.multisrs.ui.note
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -29,6 +26,9 @@ import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 import java.time.Instant
 
 
+val addedRowHeight = 16.dp
+
+
 @ExperimentalFoundationApi
 @Composable
 fun AddNote(
@@ -36,17 +36,51 @@ fun AddNote(
     directionsEnabled: SnapshotStateMap<Int, Boolean>,
     closeAddWindow: () -> Unit
 ) {
+    var addedCount by remember { mutableStateOf(1) }
 
-    val (question, setQuestion) = remember { mutableStateOf(TextFieldValue("")) }
-    val (comment, setComment) = remember { mutableStateOf(TextFieldValue("")) }
+    var question by remember { mutableStateOf(TextFieldValue("")) }
+    var comment by remember { mutableStateOf(TextFieldValue("")) }
 
     val addedNotes = remember { mutableStateListOf<Note>() }
 
-    val focusUtil = FocusUtil()
+    val focusUtil = remember { FocusUtil() }
+
+
+    fun handleAdd() {
+
+        val now = Instant.now()
+        val nowTimestamp = Timestamp.newBuilder()
+            .setSeconds(now.epochSecond)
+            .setNanos(now.nano)
+
+        val builder = Note.newBuilder()
+            .setQuestion(question.text)
+            .setQuestionComment(comment.text)
+            .setAdded(nowTimestamp)
+
+        directionsEnabled.forEach { (idx, enabled) ->
+            builder.addDirections(NoteDirection.newBuilder()
+                .setDirectionId(idx)
+                .setEnabled(enabled)
+            )
+        }
+
+        val note = builder.build()
+
+        viewModel.addNote(note)
+        addedNotes.add(0, note)
+
+        question = TextFieldValue("")
+        comment = TextFieldValue("")
+
+        addedCount += 1
+    }
 
     viewModel.ifPressed(Key.Enter) {
-        println("ENTER!!!")
+        handleAdd()
     }
+
+    focusUtil.startRecomposition()
 
     Row {
 
@@ -60,52 +94,26 @@ fun AddNote(
             }
 
             TextField(question,
-                onValueChange = { setQuestion(it) },
+                onValueChange = { question = it },
                 label = { Text("Question:") },
                 modifier = Modifier.withFocus(focusUtil, 1),
                 singleLine = true
             )
 
             TextField(comment,
-                onValueChange = { setComment(it) },
+                onValueChange = { comment = it },
                 label = { Text("Comment:") },
                 modifier = Modifier.withFocus(focusUtil, 2),
                 singleLine = true
             )
 
             Row {
-                TextButton({
-
-                    val now = Instant.now()
-                    val nowTimestamp = Timestamp.newBuilder()
-                        .setSeconds(now.epochSecond)
-                        .setNanos(now.nano)
-
-                    val builder = Note.newBuilder()
-                        .setQuestion(question.text)
-                        .setQuestionComment(comment.text)
-                        .setAdded(nowTimestamp)
-
-                    directionsEnabled.forEach { (idx, enabled) ->
-                        builder.addDirections(NoteDirection.newBuilder()
-                            .setDirectionId(idx)
-                            .setEnabled(enabled)
-                        )
-                    }
-
-                    val note = builder.build()
-
-                    viewModel.addNote(note)
-                    addedNotes.add(note)
-
-                }) { Text("Add") }
-
+                TextButton(::handleAdd) { Text("Add") }
                 TextButton(closeAddWindow) { Text("Close") }
             }
         }
 
         val addedListState = rememberLazyListState()
-
 
         Column {
             Text("Added notes:")
@@ -114,12 +122,12 @@ fun AddNote(
 
                 LazyColumn(Modifier.weight(1f), state = addedListState) {
                     items(addedNotes) {
-                        Text(it.question)
+                        Text(it.question, modifier = Modifier.requiredHeight(addedRowHeight))
                     }
                 }
 
                 VerticalScrollbar(
-                    rememberScrollbarAdapter(addedListState, addedNotes.size, 12.dp),
+                    rememberScrollbarAdapter(addedListState, addedNotes.size, addedRowHeight),
                     Modifier.fillMaxHeight()
                 )
             }
@@ -127,10 +135,8 @@ fun AddNote(
 
     }
 
-
-
-    DisposableEffect(Unit) {
-        focusUtil.moveNext(null)
+    DisposableEffect(addedCount) {
+        focusUtil.focusFirst()
         onDispose {  }
     }
 }
