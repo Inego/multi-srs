@@ -3,6 +3,7 @@ package org.inego.multisrs.ui.learning
 import androidx.compose.desktop.AppWindow
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.dp
 import org.inego.multisrs.ui.note.AddNote
-import org.inego.multisrs.ui.note.addedRowHeight
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
@@ -90,9 +90,15 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                     LazyColumn(Modifier.weight(1f), state = lazyListState) {
                         items(viewModel.newNotesView) {
                             Surface(
-
+                                color = if (it.selected) Color.White else Color.Transparent,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        it.toggle()
+                                    }
                             ) {
-                                Text(it.value.question,
+                                Text(
+                                    it.value.question,
                                     modifier = Modifier.requiredHeight(rowHeight),
                                 )
                             }

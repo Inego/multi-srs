@@ -13,4 +13,9 @@ class Selectable<T>(
         set(value) {
             _selected.value = value
         }
+
+    fun toggle(): Boolean {
+        selected = !selected
+        return selected
+    }
 }
