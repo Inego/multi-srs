@@ -26,7 +26,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
     val directionsEnabled = remember {
         val map = mutableStateMapOf<Int, Boolean>()
-        viewModel.directionsList.forEach {
+        viewModel.directions.forEach {
             map[it.id] = true // TODO save these flags in StudyData
         }
         map
@@ -34,6 +34,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
     val onDismissAddWindow = {
         addWindowHolder = null
+        viewModel.refreshStudy()
     }
 
     val closeAddWindow = {

@@ -45,6 +45,8 @@ fun AddNote(
 
     val focusUtil = remember { FocusUtil() }
 
+    fun checkCanAdd() = question.text.isNotEmpty() && directionsEnabled.any { it.value }
+
 
     fun handleAdd() {
 
@@ -77,7 +79,9 @@ fun AddNote(
     }
 
     viewModel.ifPressed(Key.Enter) {
-        handleAdd()
+        if (checkCanAdd()) {
+            handleAdd()
+        }
     }
 
     focusUtil.startRecomposition()
@@ -87,7 +91,7 @@ fun AddNote(
         Column {
 
             Row {
-                viewModel.directionsList.forEach {
+                viewModel.directions.forEach {
                     val checked = directionsEnabled[it.id]!!
                     CheckboxWithLabel(it.name, checked) { b -> directionsEnabled[it.id] = b }
                 }
@@ -108,7 +112,7 @@ fun AddNote(
             )
 
             Row {
-                TextButton(::handleAdd) { Text("Add") }
+                TextButton(::handleAdd, enabled = checkCanAdd()) { Text("Add") }
                 TextButton(closeAddWindow) { Text("Close") }
             }
         }
@@ -140,3 +144,5 @@ fun AddNote(
         onDispose {  }
     }
 }
+
+

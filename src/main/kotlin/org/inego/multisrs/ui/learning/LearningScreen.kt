@@ -11,11 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import org.inego.multisrs.data.Study
 import org.inego.multisrs.data.StudyFileResult
 import org.inego.multisrs.data.StudyReadFailure
 import org.inego.multisrs.data.StudyReadSuccess
+import org.inego.multisrs.ui.common.MyToggleButton
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
@@ -71,10 +73,18 @@ fun LearningScreen(
 
             is StudyReadSuccess -> {
 
-                val viewModel = StudyDataViewModel(studyFileResult.studyData, keysPressed)
+                val viewModel = remember { StudyDataViewModel(studyFileResult.studyData, keysPressed) }
 
                 Text("Study")
                 Text(study.fileName)
+
+                MyToggleButton(viewModel.directions, viewModel.currentDirection, {
+                    viewModel.currentDirection = it
+                }) { element, isCurrent ->
+                    Text(element.name,
+                        color = if (isCurrent) Color.Unspecified else Color.LightGray
+                    )
+                }
 
                 Column(Modifier.fillMaxHeight()) {
 
@@ -85,7 +95,6 @@ fun LearningScreen(
 
                     SelectedEntriesArea(Modifier)
                 }
-
             }
 
             is StudyReadFailure -> {
@@ -96,7 +105,7 @@ fun LearningScreen(
 
     DisposableEffect(Unit) {
         topFocusRequester.requestFocus()
-        onDispose {  }
+        onDispose { }
     }
 
 }
