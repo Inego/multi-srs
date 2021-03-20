@@ -73,7 +73,11 @@ fun LearningScreen(
 
             is StudyReadSuccess -> {
 
-                val viewModel = remember { StudyDataViewModel(studyFileResult.studyData, keysPressed) }
+                val viewModel = remember {
+                    StudyDataViewModel(studyFileResult.studyData, keysPressed).apply {
+                        refreshStudy()
+                    }
+                }
 
                 Text("Study")
                 Text(study.fileName)

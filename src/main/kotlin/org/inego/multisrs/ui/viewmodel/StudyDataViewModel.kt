@@ -7,6 +7,7 @@ import androidx.compose.ui.input.key.Key
 import org.inego.multisrs.Direction
 import org.inego.multisrs.Note
 import org.inego.multisrs.StudyData
+import org.inego.multisrs.data.directionWithId
 
 class StudyDataViewModel(
     var studyData: StudyData,
@@ -23,6 +24,7 @@ class StudyDataViewModel(
         }
         set(value) {
             _directionId.value = value.id
+            refreshStudy()
         }
 
     val directions: List<Direction> = studyData.directionsList
@@ -43,7 +45,26 @@ class StudyDataViewModel(
     }
 
     fun refreshStudy() {
+        println("refreshStudy")
+        refreshNewNotes()
+    }
 
+    private fun refreshNewNotes() {
 
+        val selected = _newNotesView
+            .filter { it.selected }
+            .map { it.value }
+            .toSet()
+
+        val directionId = _directionId.value
+
+        _newNotesView.clear()
+
+        studyData.notesList.filter {
+            val noteDirection = it.directionWithId(directionId)
+            noteDirection.enabled && noteDirection.span == 0L
+        }.mapTo(_newNotesView) {
+            Selectable(it, selected.contains(it))
+        }
     }
 }
