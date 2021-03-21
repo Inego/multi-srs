@@ -1,5 +1,6 @@
 package org.inego.multisrs.ui.learning
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
@@ -19,9 +20,13 @@ fun SelectedEntriesArea(modifier: Modifier, viewModel: StudyDataViewModel) {
 
         FlowLayout {
 
-            for (selectedNode in viewModel.selectedNotesView) {
-                Box(Modifier.padding(2.dp)) {
-                    Text(selectedNode.value.question)
+            for (note in viewModel.selectedNotesView) {
+                Box(Modifier.padding(2.dp).clickable {
+                    viewModel.toggleNote(note)
+                }) {
+                    Surface(color = Color.White) {
+                        Text(note.question)
+                    }
                 }
             }
         }

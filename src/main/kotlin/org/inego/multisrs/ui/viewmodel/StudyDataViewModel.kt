@@ -49,6 +49,10 @@ class StudyDataViewModel(
         refreshNewNotes()
     }
 
+    private fun clearSelectedNotes() {
+        _selectedNotesView.clear()
+    }
+
     private fun refreshNewNotes() {
 
         val selected = _newNotesView
@@ -68,17 +72,23 @@ class StudyDataViewModel(
         }
     }
 
-    private val _selectedNotesView = mutableStateListOf<Selectable<Note>>()
-    val selectedNotesView: List<Selectable<Note>> = _selectedNotesView
+    private val _selectedNotesView = mutableStateListOf<Note>()
+    val selectedNotesView: List<Note> = _selectedNotesView
 
 
-    fun toggleNote(selectableNote: Selectable<Note>) {
-        selectableNote.toggle()
+    fun toggleNote(note: Note) {
 
-        if (selectableNote.selected) {
-            _selectedNotesView.add(selectableNote)
+        // Look for it in studied and new notes
+
+        val selectable = _newNotesView.find { it.value == note }
+            ?: return
+
+        selectable.toggle()
+
+        if (selectable.selected) {
+            _selectedNotesView.add(note)
         } else {
-            _selectedNotesView.remove(selectableNote)
+            _selectedNotesView.remove(note)
         }
     }
 }
