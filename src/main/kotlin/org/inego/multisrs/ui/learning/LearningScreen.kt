@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -19,6 +20,8 @@ import org.inego.multisrs.data.StudyReadFailure
 import org.inego.multisrs.data.StudyReadSuccess
 import org.inego.multisrs.ui.common.MyToggleButton
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
+import java.io.File
+import java.time.Instant
 
 
 @ExperimentalFoundationApi
@@ -79,8 +82,21 @@ fun LearningScreen(
                     }
                 }
 
-                Text("Study")
-                Text(study.fileName)
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        Text("Study")
+                        Text(study.fileName)
+                    }
+                    TextButton(onClick = {
+                        File(study.fileName).writeBytes(viewModel.studyData.toByteArray())
+                        println("${Instant.now()} - ${study.fileName} saved successfully.")
+
+                    }, modifier = Modifier.align(Alignment.CenterEnd)) {
+                        Text("Save")
+                    }
+                }
+
+
 
                 MyToggleButton(viewModel.directions, viewModel.currentDirection, {
                     viewModel.currentDirection = it

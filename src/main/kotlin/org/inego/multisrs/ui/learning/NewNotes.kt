@@ -1,14 +1,11 @@
 package org.inego.multisrs.ui.learning
 
 import androidx.compose.desktop.AppWindow
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.VerticalScrollbar
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -17,12 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
+import org.inego.multisrs.Note
 import org.inego.multisrs.ui.note.AddNote
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
-private val rowHeight = 16.dp
+private val rowHeight = 24.dp
 
 
 @ExperimentalFoundationApi
@@ -85,17 +84,20 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
                 val lazyListState = rememberLazyListState()
 
+                val hovered = remember { mutableStateOf<Note?>(null) }
+
                 Row(Modifier.fillMaxWidth()) {
 
                     LazyColumn(Modifier.weight(1f), state = lazyListState) {
                         items(viewModel.newNotesView) {
                             Surface(
                                 color = if (it.selected) Color.White else Color.Transparent,
+                                border = if (hovered.value == it.value) BorderStroke(1.dp, Color.Black) else null,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
                                         it.toggle()
-                                    }
+                                    }.pointerMoveFilter { hovered.value = it.value; false }
                             ) {
                                 Text(
                                     it.value.question,
@@ -112,12 +114,15 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                 }
             }
 
-            TextButton(
+            Surface(
                 modifier = Modifier.align(Alignment.TopEnd),
-                enabled = addWindowHolder == null,
-                onClick = clickAdd
             ) {
-                Text("Add")
+                TextButton(
+                    enabled = addWindowHolder == null,
+                    onClick = clickAdd
+                ) {
+                    Text("Add")
+                }
             }
         }
     }
