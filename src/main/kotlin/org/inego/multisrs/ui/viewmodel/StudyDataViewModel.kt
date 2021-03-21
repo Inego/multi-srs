@@ -67,4 +67,18 @@ class StudyDataViewModel(
             Selectable(it, selected.contains(it))
         }
     }
+
+    private val _selectedNotesView = mutableStateListOf<Selectable<Note>>()
+    val selectedNotesView: List<Selectable<Note>> = _selectedNotesView
+
+
+    fun toggleNote(selectableNote: Selectable<Note>) {
+        selectableNote.toggle()
+
+        if (selectableNote.selected) {
+            _selectedNotesView.add(selectableNote)
+        } else {
+            _selectedNotesView.remove(selectableNote)
+        }
+    }
 }

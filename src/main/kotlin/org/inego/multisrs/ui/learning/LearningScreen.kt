@@ -113,7 +113,7 @@ fun LearningScreen(
                         NewNotes(Modifier.weight(1f), viewModel)
                     }
 
-                    SelectedEntriesArea(Modifier)
+                    SelectedEntriesArea(Modifier, viewModel)
                 }
             }
 

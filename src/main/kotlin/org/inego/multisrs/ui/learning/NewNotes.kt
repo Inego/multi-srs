@@ -96,7 +96,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        it.toggle()
+                                        viewModel.toggleNote(it)
                                     }.pointerMoveFilter { hovered.value = it.value; false }
                             ) {
                                 Text(
