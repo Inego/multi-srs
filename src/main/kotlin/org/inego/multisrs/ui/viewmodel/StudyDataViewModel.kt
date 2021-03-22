@@ -24,6 +24,7 @@ class StudyDataViewModel(
         }
         set(value) {
             _directionId.value = value.id
+            clearSelectedNotes()
             refreshStudy()
         }
 
@@ -33,15 +34,16 @@ class StudyDataViewModel(
         globalKeysPressed[key] = true
     }
 
-    fun ifPressed(key: Key, block: () -> Unit) {
+    fun isPressed(key: Key): Boolean {
         if (globalKeysPressed[key] == true) {
             globalKeysPressed.remove(key)
-            block()
+            return true
         }
+        return false
     }
 
     fun addNote(note: Note) {
-        studyData = studyData.toBuilder().addNotes(note).build()
+        studyData = studyData.toBuilder().addNotes(0, note).build()
     }
 
     fun refreshStudy() {
@@ -50,6 +52,7 @@ class StudyDataViewModel(
     }
 
     private fun clearSelectedNotes() {
+        _newNotesView.forEach { it.selected = false }
         _selectedNotesView.clear()
     }
 
@@ -91,4 +94,7 @@ class StudyDataViewModel(
             _selectedNotesView.remove(note)
         }
     }
+
+    val canCommit: Boolean
+        get() = _selectedNotesView.isNotEmpty()
 }

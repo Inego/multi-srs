@@ -78,7 +78,7 @@ fun AddNote(
         addedCount += 1
     }
 
-    viewModel.ifPressed(Key.Enter) {
+    if (viewModel.isPressed(Key.Enter)) {
         if (checkCanAdd()) {
             handleAdd()
         }

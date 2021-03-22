@@ -82,38 +82,48 @@ fun LearningScreen(
                     }
                 }
 
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Column {
-                        Text("Study")
-                        Text(study.fileName)
-                    }
-                    TextButton(onClick = {
-                        File(study.fileName).writeBytes(viewModel.studyData.toByteArray())
-                        println("${Instant.now()} - ${study.fileName} saved successfully.")
+                val commitDialogShown = remember { mutableStateOf(false) }
 
-                    }, modifier = Modifier.align(Alignment.CenterEnd)) {
-                        Text("Save")
-                    }
+                if (viewModel.isPressed(Key.Spacebar) && !commitDialogShown.value && viewModel.canCommit) {
+                    commitDialogShown.value = true
                 }
 
-
-
-                MyToggleButton(viewModel.directions, viewModel.currentDirection, {
-                    viewModel.currentDirection = it
-                }) { element, isCurrent ->
-                    Text(element.name,
-                        color = if (isCurrent) Color.Unspecified else Color.LightGray
-                    )
+                if (commitDialogShown.value) {
+                    CommitDialog(viewModel, close = { commitDialogShown.value = false })
                 }
+                else Column {
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Column {
+                            Text("Study")
+                            Text(study.fileName)
+                        }
+                        TextButton(onClick = {
+                            File(study.fileName).writeBytes(viewModel.studyData.toByteArray())
+                            println("${Instant.now()} - ${study.fileName} saved successfully.")
 
-                Column(Modifier.fillMaxHeight()) {
-
-                    Row(Modifier.fillMaxWidth().weight(1f)) {
-                        StudiedNotes(Modifier.weight(1f))
-                        NewNotes(Modifier.weight(1f), viewModel)
+                        }, modifier = Modifier.align(Alignment.CenterEnd)) {
+                            Text("Save")
+                        }
                     }
 
-                    SelectedEntriesArea(Modifier, viewModel)
+                    MyToggleButton(viewModel.directions, viewModel.currentDirection, {
+                        viewModel.currentDirection = it
+                    }) { element, isCurrent ->
+                        Text(
+                            element.name,
+                            color = if (isCurrent) Color.Unspecified else Color.LightGray
+                        )
+                    }
+
+                    Column(Modifier.fillMaxHeight()) {
+
+                        Row(Modifier.fillMaxWidth().weight(1f)) {
+                            StudiedNotes(Modifier.weight(1f))
+                            NewNotes(Modifier.weight(1f), viewModel)
+                        }
+
+                        SelectedEntriesArea(Modifier, viewModel)
+                    }
                 }
             }
 
@@ -127,5 +137,4 @@ fun LearningScreen(
         topFocusRequester.requestFocus()
         onDispose { }
     }
-
 }

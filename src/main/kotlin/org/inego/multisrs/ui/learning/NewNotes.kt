@@ -72,7 +72,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
         }
     }
 
-    viewModel.ifPressed(Key.A) {
+    if (viewModel.isPressed(Key.A)) {
         clickAdd()
     }
 
