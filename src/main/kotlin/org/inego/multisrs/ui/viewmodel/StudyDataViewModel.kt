@@ -7,6 +7,7 @@ import androidx.compose.ui.input.key.Key
 import org.inego.multisrs.Direction
 import org.inego.multisrs.Note
 import org.inego.multisrs.StudyData
+import org.inego.multisrs.data.Outcome
 import org.inego.multisrs.data.directionWithId
 
 class StudyDataViewModel(
@@ -17,6 +18,7 @@ class StudyDataViewModel(
     val newNotesView: List<Selectable<Note>> = _newNotesView
 
     private val _directionId = mutableStateOf(1) // TODO store/retrieve in StudyData
+
     var currentDirection: Direction
         get() {
             val lookingFor = _directionId.value
@@ -27,6 +29,9 @@ class StudyDataViewModel(
             clearSelectedNotes()
             refreshStudy()
         }
+
+    val currentDirectionId: Int
+        get() = _directionId.value
 
     val directions: List<Direction> = studyData.directionsList
 
@@ -69,7 +74,7 @@ class StudyDataViewModel(
 
         studyData.notesList.filter {
             val noteDirection = it.directionWithId(directionId)
-            noteDirection.enabled && noteDirection.span == 0L
+            noteDirection.enabled && noteDirection.due == 0L
         }.mapTo(_newNotesView) {
             Selectable(it, selected.contains(it))
         }
@@ -97,4 +102,28 @@ class StudyDataViewModel(
 
     val canCommit: Boolean
         get() = _selectedNotesView.isNotEmpty()
+
+
+    /**
+     * Ease for the specified outcome (percent from current span)
+     */
+    fun easeFor(outcome: Outcome): Int {
+        // TODO store in study data (settings block)
+        return when (outcome) {
+            Outcome.AGAIN -> 0
+            Outcome.DIFFICULT -> 130
+            Outcome.NORMAL -> 150
+            Outcome.EASY -> 200
+        }
+    }
+
+    fun getNewSpan(outcome: Outcome): Long {
+        // TODO from study data settings
+        return when (outcome) {
+            Outcome.AGAIN -> 0
+            Outcome.DIFFICULT -> 30
+            Outcome.NORMAL -> 300
+            Outcome.EASY -> 2000
+        }
+    }
 }
