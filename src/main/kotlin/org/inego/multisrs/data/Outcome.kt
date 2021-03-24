@@ -2,7 +2,7 @@ package org.inego.multisrs.data
 
 enum class Outcome {
     AGAIN,
-    DIFFICULT,
+    HARD,
     NORMAL,
     EASY
 }

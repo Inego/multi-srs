@@ -2,6 +2,7 @@ package org.inego.multisrs.ui.learning
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +10,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
@@ -37,8 +39,10 @@ fun CommitDialog(viewModel: StudyDataViewModel, close: () -> Unit) {
     Row(Modifier.fillMaxWidth()) {
 
         LazyColumn(Modifier.weight(1f), state = lazyListState) {
-            items(commitRows) {
-                CommitRowComposable(it)
+            items(commitRows) { commitRow ->
+                CommitRowComposable(commitRow) { outcome ->
+                    commitRow.setOutcome(outcome, viewModel)
+                }
             }
         }
 
@@ -53,13 +57,28 @@ val BUTTON_PADDING = 5.dp
 val TEXT_PADDING = 10.dp
 
 @Composable
-fun CommitRowComposable(commitRow: CommitRow) {
+fun CommitRowComposable(commitRow: CommitRow, changeOutcome: (Outcome) -> Unit) {
 
     Row(modifier = Modifier.requiredHeight(rowHeight).fillMaxWidth()) {
-        Text("Easy", Modifier.padding(BUTTON_PADDING))
-        Text("Hard", Modifier.padding(BUTTON_PADDING))
-        Text(commitRow.note.question, Modifier.weight(1.0F).padding(horizontal = TEXT_PADDING, vertical = BUTTON_PADDING))
-        Text(commitRow.span.toString(), Modifier.padding(BUTTON_PADDING))
+        Text("Easy", Modifier
+            .padding(BUTTON_PADDING)
+            .clickable {
+                changeOutcome(Outcome.EASY)
+            })
+        Text("Hard", Modifier
+            .padding(BUTTON_PADDING)
+            .clickable {
+                changeOutcome(Outcome.HARD)
+            })
+        Text(
+            commitRow.note.question, Modifier
+                .weight(1.0F)
+                .padding(horizontal = TEXT_PADDING, vertical = BUTTON_PADDING)
+                .clickable {
+                    changeOutcome(if (commitRow.outcome.value == Outcome.NORMAL) Outcome.AGAIN else Outcome.NORMAL)
+                }
+        )
+        Text(commitRow.span.value.toString(), Modifier.padding(BUTTON_PADDING))
     }
 }
 
@@ -67,8 +86,8 @@ fun CommitRowComposable(commitRow: CommitRow) {
 class CommitRow(
     val note: Note,
     val noteDirection: NoteDirection,
-    var outcome: Outcome,
-    var span: Long
+    outcome: Outcome,
+    span: Long
 ) {
     constructor(
         note: Note,
@@ -78,6 +97,14 @@ class CommitRow(
     ) : this(
         note, noteDirection, outcome, computeNewSpan(noteDirection, outcome, studyDataViewModel)
     )
+
+    val outcome = mutableStateOf(outcome)
+    val span = mutableStateOf(span)
+
+    fun setOutcome(outcome: Outcome, studyDataViewModel: StudyDataViewModel) {
+        this.outcome.value = outcome
+        span.value = computeNewSpan(noteDirection, outcome, studyDataViewModel)
+    }
 }
 
 fun computeNewSpan(noteDirection: NoteDirection, outcome: Outcome, studyDataViewModel: StudyDataViewModel): Long {

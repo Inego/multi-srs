@@ -111,7 +111,7 @@ class StudyDataViewModel(
         // TODO store in study data (settings block)
         return when (outcome) {
             Outcome.AGAIN -> 0
-            Outcome.DIFFICULT -> 130
+            Outcome.HARD -> 130
             Outcome.NORMAL -> 150
             Outcome.EASY -> 200
         }
@@ -121,7 +121,7 @@ class StudyDataViewModel(
         // TODO from study data settings
         return when (outcome) {
             Outcome.AGAIN -> 0
-            Outcome.DIFFICULT -> 30
+            Outcome.HARD -> 30
             Outcome.NORMAL -> 300
             Outcome.EASY -> 2000
         }
