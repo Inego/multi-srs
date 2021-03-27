@@ -8,9 +8,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.4.31"
     kotlin("plugin.serialization") version "1.4.31"
-
     id("org.jetbrains.compose") version "0.3.2"
-
     id("com.google.protobuf") version "0.8.15"
 
     idea

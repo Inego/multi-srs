@@ -15,13 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import org.inego.multisrs.Note
 import org.inego.multisrs.ui.note.AddNote
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
-private val rowHeight = 24.dp
+private val rowHeight = 40.dp
 
 
 @ExperimentalFoundationApi
@@ -81,7 +82,9 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
         Box(Modifier.fillMaxSize()) {
 
             Column {
-                Text("New notes")
+                if (viewModel.newNotesView.isEmpty()) {
+                    Text("New notes", fontStyle = FontStyle.Italic)
+                }
 
                 val lazyListState = rememberLazyListState()
 
@@ -98,12 +101,19 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                                     .fillMaxWidth()
                                     .clickable {
                                         viewModel.toggleNote(it.value.note)
-                                    }.pointerMoveFilter { hovered.value = it.value.note; false }
+                                    }
+                                    .pointerMoveFilter {
+                                        hovered.value = it.value.note
+                                        false
+                                    }
                             ) {
-                                Text(
-                                    it.value.note.question,
-                                    modifier = Modifier.requiredHeight(rowHeight),
-                                )
+                                Column(Modifier.requiredHeight(rowHeight)) {
+                                    Text(
+                                        it.value.note.question,
+                                        modifier = Modifier
+                                    )
+                                }
+
                             }
                         }
                     }

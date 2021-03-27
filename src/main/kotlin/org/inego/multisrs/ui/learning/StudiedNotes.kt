@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import org.inego.multisrs.Note
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
@@ -29,7 +30,10 @@ fun StudiedNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
     Surface(modifier, color = Color.LightGray) {
 
         Column(Modifier.fillMaxSize()) {
-            Text("Studied notes")
+
+            if (viewModel.studiedNotesView.isEmpty()) {
+                Text("Studied notes", fontStyle = FontStyle.Italic)
+            }
 
             Row(Modifier.fillMaxWidth()) {
 

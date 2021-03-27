@@ -114,7 +114,8 @@ class StudyDataViewModel(
     }
 
     private val _selectedNotesView = mutableStateOf(listOf<Note>())
-    val selectedNotesView: List<Note> = _selectedNotesView.value
+    val selectedNotesView: List<Note>
+        get() = _selectedNotesView.value
 
 
     fun toggleNote(note: Note) {
