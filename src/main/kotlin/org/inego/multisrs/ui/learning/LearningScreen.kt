@@ -118,7 +118,7 @@ fun LearningScreen(
                     Column(Modifier.fillMaxHeight()) {
 
                         Row(Modifier.fillMaxWidth().weight(1f)) {
-                            StudiedNotes(Modifier.weight(1f))
+                            StudiedNotes(Modifier.weight(1f), viewModel)
                             NewNotes(Modifier.weight(1f), viewModel)
                         }
 

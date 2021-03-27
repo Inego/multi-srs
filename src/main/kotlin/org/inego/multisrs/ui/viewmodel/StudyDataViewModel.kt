@@ -1,12 +1,12 @@
 package org.inego.multisrs.ui.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.input.key.Key
 import org.inego.multisrs.Direction
 import org.inego.multisrs.Note
 import org.inego.multisrs.StudyData
+import org.inego.multisrs.data.NoteWithDirection
 import org.inego.multisrs.data.Outcome
 import org.inego.multisrs.data.directionWithId
 import org.inego.multisrs.ui.learning.CommitRow
@@ -17,8 +17,13 @@ class StudyDataViewModel(
     var studyData: StudyData,
     private val globalKeysPressed: SnapshotStateMap<Key, Boolean>
 ) {
-    private val _newNotesView = mutableStateListOf<Selectable<Note>>()
-    val newNotesView: List<Selectable<Note>> = _newNotesView
+    private var _newNotesView = mutableStateOf(listOf<Selectable<NoteWithDirection>>())
+    val newNotesView: List<Selectable<NoteWithDirection>>
+        get() = _newNotesView.value
+
+    private val _studiedNotesView = mutableStateOf(listOf<Selectable<NoteWithDirection>>())
+    val studiedNotesView: List<Selectable<NoteWithDirection>>
+        get() = _studiedNotesView.value
 
     private val _directionId = mutableStateOf(1) // TODO store/retrieve in StudyData
 
@@ -54,54 +59,83 @@ class StudyDataViewModel(
     }
 
     fun refreshStudy(keepSelected: Boolean = false) {
-        println("refreshStudy")
+        if (!keepSelected) {
+            _selectedNotesView.value = listOf()
+        }
+        refreshStudiedNotes(keepSelected)
         refreshNewNotes(keepSelected)
     }
 
 
     private fun refreshNewNotes(keepSelected: Boolean = false) {
 
-        val selected = if (keepSelected)
-            _newNotesView
-                .filter { it.selected }
-                .map { it.value }
-                .toSet()
-        else setOf()
+        val selected = selectedSet(keepSelected, _newNotesView.value)
 
         val directionId = _directionId.value
 
-        _newNotesView.clear()
+        val newList = studyData.notesList
+            .map {
+                val noteDirection = it.directionWithId(directionId)
+                NoteWithDirection(it, noteDirection)
+            }
+            .filter {
+                it.direction.enabled && it.direction.due == 0L
+            }.map {
+                Selectable(it, selected.contains(it.note))
+            }
 
-        studyData.notesList.filter {
-            val noteDirection = it.directionWithId(directionId)
-            noteDirection.enabled && noteDirection.due == 0L
-        }.mapTo(_newNotesView) {
-            Selectable(it, selected.contains(it))
-        }
+        _newNotesView.value = newList
     }
 
-    private val _selectedNotesView = mutableStateListOf<Note>()
-    val selectedNotesView: List<Note> = _selectedNotesView
+    private fun selectedSet(keepSelected: Boolean, view: List<Selectable<NoteWithDirection>>) =
+        if (keepSelected)
+            view
+                .filter { it.selected }
+                .map { it.value.note }
+                .toSet()
+        else setOf()
+
+
+    private fun refreshStudiedNotes(keepSelected: Boolean = false) {
+
+        val selected = selectedSet(keepSelected, _studiedNotesView.value)
+
+        val directionId = _directionId.value
+
+        _studiedNotesView.value = studyData.notesList
+            .map { NoteWithDirection(it, it.directionWithId(directionId)) }
+            .filter {
+                it.direction.enabled && it.direction.due > 0
+            }
+            .sortedBy { it.direction.due }
+            .map {
+                Selectable(it, selected.contains(it.note))
+            }
+    }
+
+    private val _selectedNotesView = mutableStateOf(listOf<Note>())
+    val selectedNotesView: List<Note> = _selectedNotesView.value
 
 
     fun toggleNote(note: Note) {
 
         // Look for it in studied and new notes
 
-        val selectable = _newNotesView.find { it.value == note }
+        val selectable = _newNotesView.value.find { it.value.note == note }
+            ?: _studiedNotesView.value.find { it.value.note == note }
             ?: return
 
         selectable.toggle()
 
         if (selectable.selected) {
-            _selectedNotesView.add(note)
+            _selectedNotesView.value = _selectedNotesView.value.toMutableList().also { it.add(note) }
         } else {
-            _selectedNotesView.remove(note)
+            _selectedNotesView.value = _selectedNotesView.value.toMutableList().also { it.remove(note) }
         }
     }
 
     val canCommit: Boolean
-        get() = _selectedNotesView.isNotEmpty()
+        get() = _selectedNotesView.value.isNotEmpty()
 
 
     /**

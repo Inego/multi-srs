@@ -79,6 +79,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
     Surface(modifier, color = Color.Yellow) {
 
         Box(Modifier.fillMaxSize()) {
+
             Column {
                 Text("New notes")
 
@@ -92,15 +93,15 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                         items(viewModel.newNotesView) {
                             Surface(
                                 color = if (it.selected) Color.White else Color.Transparent,
-                                border = if (hovered.value == it.value) BorderStroke(1.dp, Color.Black) else null,
+                                border = if (hovered.value == it.value.note) BorderStroke(1.dp, Color.Black) else null,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        viewModel.toggleNote(it.value)
-                                    }.pointerMoveFilter { hovered.value = it.value; false }
+                                        viewModel.toggleNote(it.value.note)
+                                    }.pointerMoveFilter { hovered.value = it.value.note; false }
                             ) {
                                 Text(
-                                    it.value.question,
+                                    it.value.note.question,
                                     modifier = Modifier.requiredHeight(rowHeight),
                                 )
                             }

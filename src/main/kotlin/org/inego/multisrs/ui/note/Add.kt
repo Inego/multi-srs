@@ -41,7 +41,7 @@ fun AddNote(
     var question by remember { mutableStateOf(TextFieldValue("")) }
     var comment by remember { mutableStateOf(TextFieldValue("")) }
 
-    val addedNotes = remember { mutableStateListOf<Note>() }
+    val addedNotes = remember { mutableStateOf(listOf<Note>()) }
 
     val focusUtil = remember { FocusUtil() }
 
@@ -70,7 +70,8 @@ fun AddNote(
         val note = builder.build()
 
         viewModel.addNote(note)
-        addedNotes.add(0, note)
+
+        addedNotes.value = addedNotes.value.toMutableList().also { it.add(0, note) }
 
         question = TextFieldValue("")
         comment = TextFieldValue("")
@@ -125,13 +126,13 @@ fun AddNote(
             Row(Modifier.fillMaxWidth()) {
 
                 LazyColumn(Modifier.weight(1f), state = addedListState) {
-                    items(addedNotes) {
+                    items(addedNotes.value) {
                         Text(it.question, modifier = Modifier.requiredHeight(addedRowHeight))
                     }
                 }
 
                 VerticalScrollbar(
-                    rememberScrollbarAdapter(addedListState, addedNotes.size, addedRowHeight),
+                    rememberScrollbarAdapter(addedListState, addedNotes.value.size, addedRowHeight),
                     Modifier.fillMaxHeight()
                 )
             }
