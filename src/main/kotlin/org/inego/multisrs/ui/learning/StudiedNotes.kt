@@ -15,12 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.inego.multisrs.Note
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 import java.time.Instant
 
 
-private val rowHeight = 24.dp
+private val rowHeight = 42.dp
 
 
 @ExperimentalFoundationApi
@@ -45,7 +46,7 @@ fun StudiedNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
                     val nowSeconds = Instant.now().epochSecond
 
-                    items(viewModel.studiedNotesView, key = { it.value.note } ) {
+                    items(viewModel.studiedNotesView, key = { it.value.note }) {
                         Surface(
                             color = if (it.selected) Color.White else Color.Transparent,
                             border = if (hovered.value == it.value.note) BorderStroke(1.dp, Color.Black) else null,
@@ -56,11 +57,25 @@ fun StudiedNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                                 }.pointerMoveFilter { hovered.value = it.value.note; false }
                         ) {
                             Row {
-                                Text(
-                                    it.value.note.question,
-                                    modifier = Modifier
-                                        .requiredHeight(rowHeight).weight(1F),
-                                )
+
+                                Column(Modifier
+                                    .requiredHeight(rowHeight)
+                                    .weight(1F)
+                                ) {
+                                    Text(
+                                        it.value.note.question,
+                                        modifier = Modifier,
+                                    )
+
+                                    Text(
+                                        it.value.note.questionComment,
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        color = Color.Gray,
+                                        fontSize = 12.sp,
+                                        fontStyle = FontStyle.Italic
+                                    )
+                                }
+
 
                                 Text(
                                     (it.value.direction.due - nowSeconds).toString(),

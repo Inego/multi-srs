@@ -16,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.inego.multisrs.Note
 import org.inego.multisrs.NoteDirection
 import org.inego.multisrs.data.Outcome
@@ -26,7 +28,7 @@ import org.inego.multisrs.ui.common.Orange
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 private val TEXT_PADDING = 10.dp
-private val ROW_HEIGHT = 36.dp
+private val ROW_HEIGHT = 42.dp
 
 val hoverBorder = BorderStroke(1.dp, Color.Black)
 
@@ -138,7 +140,6 @@ fun CommitRowComposable(commitRow: CommitRow, changeOutcome: (Outcome) -> Unit) 
                         .padding(horizontal = TEXT_PADDING)
                 )
             }
-
         }
 
         Box(
@@ -150,19 +151,27 @@ fun CommitRowComposable(commitRow: CommitRow, changeOutcome: (Outcome) -> Unit) 
                 },
             contentAlignment = Alignment.CenterStart
         ) {
-            Text(
-                commitRow.note.question,
-                color = when (outcome) {
-                    Outcome.AGAIN -> Color.Red
-                    Outcome.HARD -> Orange
-                    Outcome.NORMAL -> Color.Black
-                    Outcome.EASY -> Color.Green
-                },
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = TEXT_PADDING)
-            )
+            Column {
+                Text(
+                    commitRow.note.question,
+                    color = when (outcome) {
+                        Outcome.AGAIN -> Color.Red
+                        Outcome.HARD -> Orange
+                        Outcome.NORMAL -> Color.Black
+                        Outcome.EASY -> Color.Green
+                    },
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = TEXT_PADDING)
+                )
+                Text(
+                    commitRow.note.questionComment,
+                    modifier = Modifier.padding(start = 5.dp),
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    fontStyle = FontStyle.Italic
+                )
+            }
         }
-
 
         Text(
             commitRow.span.value.toString(),

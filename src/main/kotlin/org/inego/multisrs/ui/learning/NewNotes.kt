@@ -17,12 +17,13 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.inego.multisrs.Note
 import org.inego.multisrs.ui.note.AddNote
 import org.inego.multisrs.ui.viewmodel.StudyDataViewModel
 
 
-private val rowHeight = 40.dp
+private val rowHeight = 42.dp
 
 
 @ExperimentalFoundationApi
@@ -111,6 +112,14 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
                                     Text(
                                         it.value.note.question,
                                         modifier = Modifier
+                                    )
+                                    Text(
+                                        it.value.note.questionComment,
+                                        modifier = Modifier.padding(start = 5.dp),
+                                        color = Color.Gray,
+                                        fontSize = 12.sp,
+                                        fontStyle = FontStyle.Italic,
+
                                     )
                                 }
 
