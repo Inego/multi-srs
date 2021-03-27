@@ -126,4 +126,8 @@ class StudyDataViewModel(
             Outcome.EASY -> 2000
         }
     }
+
+    fun clearPressed() {
+        globalKeysPressed.clear()
+    }
 }
