@@ -40,16 +40,16 @@ fun CommitDialog(viewModel: StudyDataViewModel, close: () -> Unit) {
         close()
     }
 
+    val commitRows = remember { viewModel.extractCommitRows() }
+
     val commitAndClose = {
-        println("ENTER!")
+        viewModel.commit(commitRows)
         close()
     }
 
     if (viewModel.isPressed(Key.Enter)) {
         commitAndClose()
     }
-
-    val commitRows = remember { viewModel.extractCommitRows() }
 
     val lazyListState = rememberLazyListState()
 

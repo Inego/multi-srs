@@ -9,6 +9,9 @@ import org.inego.multisrs.Note
 import org.inego.multisrs.StudyData
 import org.inego.multisrs.data.Outcome
 import org.inego.multisrs.data.directionWithId
+import org.inego.multisrs.ui.learning.CommitRow
+import java.time.Instant
+
 
 class StudyDataViewModel(
     var studyData: StudyData,
@@ -26,7 +29,6 @@ class StudyDataViewModel(
         }
         set(value) {
             _directionId.value = value.id
-            clearSelectedNotes()
             refreshStudy()
         }
 
@@ -51,22 +53,20 @@ class StudyDataViewModel(
         studyData = studyData.toBuilder().addNotes(0, note).build()
     }
 
-    fun refreshStudy() {
+    fun refreshStudy(keepSelected: Boolean = false) {
         println("refreshStudy")
-        refreshNewNotes()
+        refreshNewNotes(keepSelected)
     }
 
-    private fun clearSelectedNotes() {
-        _newNotesView.forEach { it.selected = false }
-        _selectedNotesView.clear()
-    }
 
-    private fun refreshNewNotes() {
+    private fun refreshNewNotes(keepSelected: Boolean = false) {
 
-        val selected = _newNotesView
-            .filter { it.selected }
-            .map { it.value }
-            .toSet()
+        val selected = if (keepSelected)
+            _newNotesView
+                .filter { it.selected }
+                .map { it.value }
+                .toSet()
+        else setOf()
 
         val directionId = _directionId.value
 
@@ -129,5 +129,45 @@ class StudyDataViewModel(
 
     fun clearPressed() {
         globalKeysPressed.clear()
+    }
+
+
+    fun commit(rows: List<CommitRow>) {
+
+        val now = Instant.now()
+        val nowEpochSecond = now.epochSecond
+
+        val committedNotes = rows.associateBy { it.note }
+
+        val studyDataBuilder = studyData.toBuilder()
+
+        // TODO can be optimized (keep note index in commit row?)
+
+        for (i in 0 until studyData.notesCount) {
+
+            val note = studyData.getNotes(i)
+            val commitRow = committedNotes[note]
+            if (commitRow != null) {
+
+                val committedDirection = commitRow.noteDirection
+
+                val noteCopy = note.toBuilder()
+
+                for (directionBuilder in noteCopy.directionsBuilderList) {
+                    if (directionBuilder.directionId == committedDirection.directionId) {
+                        val span = commitRow.span.value
+                        directionBuilder.span = span
+                        directionBuilder.due = nowEpochSecond + span
+                        break
+                    }
+                }
+
+                studyDataBuilder.setNotes(i, noteCopy)
+            }
+        }
+
+        studyData = studyDataBuilder.build()
+
+        refreshStudy()
     }
 }

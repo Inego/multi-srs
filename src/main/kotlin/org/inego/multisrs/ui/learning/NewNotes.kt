@@ -42,7 +42,7 @@ fun NewNotes(modifier: Modifier, viewModel: StudyDataViewModel) {
 
     val onDismissAddWindow = {
         addWindowHolder = null
-        viewModel.refreshStudy()
+        viewModel.refreshStudy(true)
     }
 
     val closeAddWindow = {
